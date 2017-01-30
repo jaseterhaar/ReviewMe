@@ -2,8 +2,6 @@ package reviewme;
 
 import java.util.*;
 
-import javax.swing.plaf.synth.SynthSeparatorUI;
-
 public class ReviewMe {
 	static Scanner scanner = new Scanner(System.in);
 	static ArrayList <Gebruiker> gebruikers = new ArrayList<>(); 
@@ -11,14 +9,13 @@ public class ReviewMe {
 	static int gebruikersIdSession = 2;
 	static int uploadCount;
 	private int keuze;
-	private int uploadId;
 
 
 	void start(){		
 		laadGebruikers(); //inladen van gebruikers
 		laadUploads(); //inladen van uploads
+		beoordeling();
 
-		boekenLijst();
 		/*
 		System.out.println("Welcome bij ReviewMe!");
 		System.out.println("=====================\n");
@@ -135,90 +132,6 @@ public class ReviewMe {
 
 	}
 
-	//Categorie keuzes
-	void boekenLijst(){
-		boolean keuzeGemaakt = false;
-		do{	
-			System.out.println("Welk boek wilt u beoordelen?");
-			System.out.println("============================");
-
-			ArrayList <Integer> bookId = new ArrayList<>();
-
-			for (int i = 0; i < uploadCount; i++) {
-
-				if(uploads.get(i) instanceof Boek){
-					bookId.add(i);
-					System.out.println((bookId.size())+": "+uploads.get(i).getTitel());				
-				}
-			}
-			System.out.println("0: Ga terug naar het vorige menu");
-			//////////////
-			valideerInvoer();
-			//////////////
-			keuze = keuze-1;
-			for (int i = 0; i < bookId.size(); i++) {
-				if(keuze == i){
-					uploadId = bookId.get(i);
-					System.out.println();
-					keuzeGemaakt = true;
-				}
-			}
-			if (keuze >= bookId.size() || keuze < -1){
-				System.out.println("De ingevoerde keuze is onbekend. Probeer opnieuw ... ");
-			} else if (keuze == -1){
-				reviewMenu();
-			}
-		} while (keuzeGemaakt == false);
-
-		keuzeGemaakt = false;
-		while(keuzeGemaakt == false){
-			System.out.println("========================================");
-			System.out.println("U heeft gekozen voor:\n"+uploads.get(uploadId).titel);
-			System.out.println("----------------------------------------");
-			System.out.println("Maak een keuze:");
-			System.out.println("1: Geef cijfer\n2: Meer info\n3: Ga naar vorig menu");
-			valideerInvoer();
-			switch(keuze){
-			case 1:
-				geefCijfer();
-				keuzeGemaakt = true;
-				break;
-			case 2:
-				System.out.println("geef meer info");
-				keuzeGemaakt = true;
-				break;
-			case 3:
-				boekenLijst();
-				break;
-			default:
-				System.out.println("Deze keuze zit er niet tussen. Probeer opnieuw...");
-				keuzeGemaakt = false;
-				break;
-			}
-		}
-
-	}
-	
-	void geefCijfer(){
-		System.out.println(uploads.get(uploadId).titel);
-		//Kijken of het cijfer al gegeven is
-		gebruikers.get(2).setUploadIdCijfer(2);//0
-		gebruikers.get(2).setGegevenCijfer(0, 8);//0
-		gebruikers.get(2).setUploadIdCijfer(0);//1
-		gebruikers.get(2).setGegevenCijfer(1, 6);//1
-		boolean lijstNietLeeg = false;
-		System.out.println(gebruikers.get(gebruikersIdSession).getUploadIdCijfer(1));
-		
-		for(int i = 0; i < gebruikers.get(gebruikersIdSession).getUploadIdCijfer().size(); i++){
-			if(uploadId == gebruikers.get(gebruikersIdSession).getUploadIdCijfer(i)){
-				System.out.println("true " + i);
-			}
-		}
-//		if(!lijstNietLeeg){
-//			System.out.println("Lijst leeg");
-//		}
-		System.out.println("Geef een cijfer tussen 0 - 10");
-	}
 
 	void valideerInvoer(){
 		keuze = -1;
@@ -229,5 +142,46 @@ public class ReviewMe {
 		}
 	}
 
+	void boekenLijst(){
+		int aantalBoeken = 0;
+		for(int i=0; i < uploads.size(); i++){
+			if(uploads.get(i) instanceof Boek){
+				aantalBoeken++;
+			}
+		}
+		int [] boekenlijst = new int[aantalBoeken];
+		boolean keuzeGemaakt = false;
+		while(keuzeGemaakt == false){
+			System.out.println("Kies een boek:");
+			System.out.println("=======================");
+			int index = 0;
+			for (int i = 0; i < uploads.size(); i++) {
+				if(uploads.get(i) instanceof Boek){
+					System.out.println((index+1)+" : "+ uploads.get(i).getTitel());
+					boekenlijst[index] = i;
+					index++;
+				}
+			}
+			System.out.println("0 : Terug naar vorig menu");
+			valideerInvoer();
+			for (int i = 0; i < boekenlijst.length; i++) {
+				if(keuze == (i+1)){
+					keuzeGemaakt = true;
+				}
+			}
+			if(keuze == 0){
+				reviewMenu();
+				keuzeGemaakt = true;
+			}else if (!keuzeGemaakt){
+				System.out.println("Verkeerde invoer. Probeer opnieuw...");
+			}
+		}
+		beoordeling();
+	}
+	
+	void beoordeling(){
+		keuze = 0;
+		
+	}
 
 }
