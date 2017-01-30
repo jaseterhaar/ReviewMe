@@ -5,16 +5,17 @@ import java.util.*;
 public class ReviewMe {
 	static Scanner scanner = new Scanner(System.in);
 	static ArrayList <Gebruiker> gebruikers = new ArrayList<>(); 
-	static ArrayList <Upload> uploads = new ArrayList<>();
-	static int gebruikersIdSession = 2;
+	static ArrayList <Item> items = new ArrayList<>();
+	static int gebruikersId = 2;
 	static int uploadCount;
 	private int keuze;
+	private int itemId;
 
 
 	void start(){		
 		laadGebruikers(); //inladen van gebruikers
 		laadUploads(); //inladen van uploads
-		beoordeling();
+		boekenLijst();
 
 		/*
 		System.out.println("Welcome bij ReviewMe!");
@@ -42,7 +43,7 @@ public class ReviewMe {
 					gelijkeGebruikersnaam = true;
 					if(wachtwoord.equals(gebruikers.get(i).getWachtwoord())){
 						validated = true;
-						gebruikersIdSession = i;
+						gebruikersId = i;
 					} else {
 						System.out.println("Combinatie gebruikersnaam en/of wachtwoord onbekend\nProbeer het opnieuw...");
 						scanner.nextLine();
@@ -67,9 +68,9 @@ public class ReviewMe {
 				System.out.println((i+1)+": "+categorie[i]);
 			}
 			//optie voor afsluiten of in geval van uploader naar hoofdmenu gaan.
-			if(gebruikers.get(gebruikersIdSession) instanceof Reviewer){
+			if(gebruikers.get(gebruikersId) instanceof Reviewer){
 				System.out.println("0: Sluit af");
-			} else if (gebruikers.get(gebruikersIdSession) instanceof Uploader){
+			} else if (gebruikers.get(gebruikersId) instanceof Uploader){
 				System.out.println("0: Ga naar hoofdmenu");
 			}
 			System.out.println();		
@@ -82,9 +83,9 @@ public class ReviewMe {
 
 			switch(keuze){
 			case 0:
-				if(gebruikers.get(gebruikersIdSession) instanceof Reviewer){
+				if(gebruikers.get(gebruikersId) instanceof Reviewer){
 					System.exit(1);
-				} else if (gebruikers.get(gebruikersIdSession) instanceof Uploader){
+				} else if (gebruikers.get(gebruikersId) instanceof Uploader){
 					System.out.println("uploadersmenu");
 				}
 				break;
@@ -117,18 +118,18 @@ public class ReviewMe {
 	}
 
 	void laadUploads(){
-		uploads.add((Boek)new Boek(0,"Wetten der Magie"));
-		uploads.add((Boek)new Boek(1,"Yab Yum"));
-		uploads.add((Boek)new Boek(2,"Het testament"));
-		uploads.add((Song)new Song(3,"Brindis"));
-		uploads.add((Song)new Song(4,"Hold up"));
-		uploads.add((Song)new Song(5,"Bohemian Rhapsody"));
-		uploads.add((Video)new Video(6,"Card flourishes"));
-		uploads.add((Video)new Video(7,"Shawshank Redemption"));
-		uploads.add((Video)new Video(8,"How to make cocktails"));
-		uploads.add((Boek)new Boek(9,"Max Havelaar"));
+		items.add((Boek)new Boek(0,"Wetten der Magie"));
+		items.add((Boek)new Boek(1,"Yab Yum"));
+		items.add((Boek)new Boek(2,"Het testament"));
+		items.add((Song)new Song(3,"Brindis"));
+		items.add((Song)new Song(4,"Hold up"));
+		items.add((Song)new Song(5,"Bohemian Rhapsody"));
+		items.add((Video)new Video(6,"Card flourishes"));
+		items.add((Video)new Video(7,"Shawshank Redemption"));
+		items.add((Video)new Video(8,"How to make cocktails"));
+		items.add((Boek)new Boek(9,"Max Havelaar"));
 
-		uploadCount = uploads.size();
+		uploadCount = items.size();
 
 	}
 
@@ -144,29 +145,32 @@ public class ReviewMe {
 
 	void boekenLijst(){
 		int aantalBoeken = 0;
-		for(int i=0; i < uploads.size(); i++){
-			if(uploads.get(i) instanceof Boek){
+		for(int i=0; i < items.size(); i++){
+			if(items.get(i) instanceof Boek){
 				aantalBoeken++;
 			}
 		}
+		int boekKeuze = 0;
 		int [] boekenlijst = new int[aantalBoeken];
 		boolean keuzeGemaakt = false;
 		while(keuzeGemaakt == false){
 			System.out.println("Kies een boek:");
-			System.out.println("=======================");
+			System.out.println("============================");
 			int index = 0;
-			for (int i = 0; i < uploads.size(); i++) {
-				if(uploads.get(i) instanceof Boek){
-					System.out.println((index+1)+" : "+ uploads.get(i).getTitel());
+			for (int i = 0; i < items.size(); i++) {
+				if(items.get(i) instanceof Boek){
+					System.out.println((index+1)+" : "+ items.get(i).getTitel());
 					boekenlijst[index] = i;
 					index++;
 				}
 			}
 			System.out.println("0 : Terug naar vorig menu");
 			valideerInvoer();
+			boekKeuze = keuze;
 			for (int i = 0; i < boekenlijst.length; i++) {
-				if(keuze == (i+1)){
+				if(boekKeuze == (i+1)){
 					keuzeGemaakt = true;
+					boekKeuze--;
 				}
 			}
 			if(keuze == 0){
@@ -176,12 +180,68 @@ public class ReviewMe {
 				System.out.println("Verkeerde invoer. Probeer opnieuw...");
 			}
 		}
-		beoordeling();
+		itemId = boekenlijst[boekKeuze];
+		itemMenu();
 	}
-	
-	void beoordeling(){
-		keuze = 0;
-		
+
+	void itemMenu(){
+		boolean keuzeGemaakt = false;
+		while (keuzeGemaakt == false){
+			System.out.println("U heeft gekozen voor:\n"+ items.get(itemId).getTitel());
+			System.out.println("============================");
+			System.out.println("1 : Info over item");
+			System.out.println("2 : Geef een cijfer");
+			System.out.println("0 : Ga terug naar vorig menu");
+			valideerInvoer();
+			switch(keuze){
+			case 1:
+				System.out.println("Infomenu");
+				keuzeGemaakt = true;
+				break;
+			case 2:
+				cijferGeven();
+				keuzeGemaakt = true;
+				break;
+			case 0:
+				if(items.get(itemId) instanceof Boek){
+					boekenLijst();
+				}else if(items.get(itemId) instanceof Song){
+					System.out.println("terug naar Song");
+				}else if(items.get(itemId) instanceof Video){
+					System.out.println("terug naar Video");
+				}
+				keuzeGemaakt = true;
+				break;
+			default:
+				System.out.println("Verkeerde invoer. Probeer opnieuw...");
+				keuzeGemaakt = false;
+				break;
+			}
+		}
+
+	}
+
+	void cijferGeven(){
+		int cijfer;
+		boolean keuzeGemaakt = false;
+		while(keuzeGemaakt == false){
+			System.out.println(items.get(itemId).getTitel());
+			System.out.println("============================");
+			System.out.println("Geef een cijfer van 0 t/m 10:");
+			valideerInvoer();
+			if(keuze >= 0 && keuze <11){
+				cijfer = keuze;
+				System.out.println("U heeft het volgende cijfer gegeven: \n"+ cijfer+".0");
+				System.out.println("Druk op een toets om verder te gaan...");
+				scanner.nextLine();
+				items.get(itemId).setCijferLijst((items.get(itemId).getCijferCount()-1), gebruikersId, cijfer);
+				gebruikers.get(gebruikersId).setCijferLijst(gebruikers.get(gebruikersId).getCijferCount()-1, itemId, cijfer);
+				keuzeGemaakt = true;
+			} else {
+				System.out.println("Verkeerde invoer. Probeer opnieuw...");
+				keuzeGemaakt = false;
+			}
+		}
 	}
 
 }

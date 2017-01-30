@@ -5,10 +5,10 @@ import java.util.ArrayList;
 public abstract class Gebruiker {
 	String gebruikersNaam;
 	String wachtwoord;
-	int aantalBeoordelingen;
+	int cijferCount=1;
 	
 	//[cijferId][cijfer]
-	private int [][] cijferlijst = new int[aantalBeoordelingen][];
+	private int [][] cijferLijst = new int[cijferCount][2];
 	
 	public String getGebruikersNaam(){
 		return gebruikersNaam;
@@ -24,13 +24,16 @@ public abstract class Gebruiker {
 		wachtwoord = password;
 	}
 	
-	public int[][] getCijferlijst(){
-		return cijferlijst;
+	public int [][]getCijferLijst(){
+		return cijferLijst;
 	}
-	public void setCijferlijst(int index, int cijferId, int cijfer){
-		cijferlijst[index][index] = cijferId;
-		cijferlijst[index][index+1] = cijfer;
+	public void setCijferLijst(int index, int cijferId, int cijfer){
+		cijferLijst[index][0] = cijferId;
+		cijferLijst[index][1] = cijfer;
+		cijferCount++;
 	}
-	
+	public int getCijferCount(){
+		return cijferCount;
+	}
 	
 }
