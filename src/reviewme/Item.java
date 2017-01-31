@@ -38,9 +38,6 @@ public abstract class Item {
 		
 	}
 	public void changeCijfer(int index, int itemId, int cijfer){
-		System.out.println("index" + index);
-		System.out.println("itemId" + itemId);
-		System.out.println("cijfer" + cijfer);
 		
 		this.gebruikerId.set(index, itemId);
 		cijferlijst.set(index, cijfer);	

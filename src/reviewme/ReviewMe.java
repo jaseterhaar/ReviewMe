@@ -15,24 +15,15 @@ public class ReviewMe {
 	void start(){		
 		laadGebruikers(); //inladen van gebruikers
 		laadUploads(); //inladen van uploads
-		reviewMenu();
 
-		/*
+
 		System.out.println("Welcome bij ReviewMe!");
 		System.out.println("=====================\n");
 		login();
-		if(gebruikers.get(gebruikersIdSession) instanceof Reviewer){
-			reviewMenu();
-		} else if (gebruikers.get(gebruikersIdSession) instanceof Uploader){
-			System.out.println("Uploader");
-		}
-		System.out.println(gebruikers.get(gebruikersIdSession).getGebruikersNaam()+" het inloggen is gelukt!");
-		 */
 	}
-
 	void login(){
-		boolean validated = false;
-		while(validated == false){
+		boolean loginValidated = false;
+		while(loginValidated == false){
 			System.out.print("Gebruikersnaam: ");
 			String gebruikersnaam = scanner.nextLine();
 			System.out.print("Password: ");
@@ -42,7 +33,7 @@ public class ReviewMe {
 				if(gebruikersnaam.equals(gebruikers.get(i).getGebruikersNaam())){
 					gelijkeGebruikersnaam = true;
 					if(wachtwoord.equals(gebruikers.get(i).getWachtwoord())){
-						validated = true;
+						loginValidated = true;
 						gebruikerId = i;
 					} else {
 						System.out.println("Combinatie gebruikersnaam en/of wachtwoord onbekend\nProbeer het opnieuw...");
@@ -55,24 +46,32 @@ public class ReviewMe {
 				scanner.nextLine();
 			}
 		}
+		System.out.println(gebruikers.get(gebruikerId).getGebruikersNaam()+" het inloggen is gelukt!");
+		hoofdMenu();
+
 	}
 
-	void reviewMenu(){
+	//Menu om items te reviewen
+	void hoofdMenu(){
 		String categorie [] = {"Boeken","Muziek","Video's"};
 
 		boolean keuzeGemaakt = false;
 		while (keuzeGemaakt == false){
-			System.out.println("Kies categorie:");
+			System.out.println("Maak een keuze:");
 			System.out.println("===============");
 			for (int i = 0; i < categorie.length; i++) {
 				System.out.println((i+1)+": "+categorie[i]);
 			}
 			//optie voor afsluiten of in geval van uploader naar hoofdmenu gaan.
-			if(gebruikers.get(gebruikerId) instanceof Reviewer){
-				System.out.println("0: Sluit af");
-			} else if (gebruikers.get(gebruikerId) instanceof Uploader){
-				System.out.println("0: Ga naar hoofdmenu");
+			if (gebruikers.get(gebruikerId) instanceof Uploader){
+				System.out.println("7: Upload item");
 			}
+			System.out.println("8: Gebruikersinfo");
+			System.out.println("9: Log uit");
+			System.out.println("0: Sluit af");
+
+
+
 			System.out.println();		
 			int keuze = 0;
 			try {
@@ -83,11 +82,7 @@ public class ReviewMe {
 
 			switch(keuze){
 			case 0:
-				if(gebruikers.get(gebruikerId) instanceof Reviewer){
-					System.exit(1);
-				} else if (gebruikers.get(gebruikerId) instanceof Uploader){
-					System.out.println("uploadersmenu");
-				}
+				System.exit(1);
 				break;
 			case 1:
 				keuzeGemaakt = true;
@@ -101,6 +96,30 @@ public class ReviewMe {
 				keuzeGemaakt = true;
 				videoLijst();
 				break;
+			case 7:
+				if(gebruikers.get(gebruikerId) instanceof Uploader){
+					System.out.println("uploadMenu");
+					keuzeGemaakt = true;
+					break;
+				} else {
+					System.out.println("Deze keuze zit er niet tussen. Probeer opnieuw...");
+					keuzeGemaakt = false;
+					break;
+				}
+
+			case 8:
+				keuzeGemaakt = true;
+				System.out.println("GebruikersInfo");
+				break;
+			case 9:
+				keuzeGemaakt = true;
+				System.out.println("U bent nu uitgelogd. \n====================\nVul onderstaande gegevens in om in te loggen:");
+
+				scanner.nextLine();
+				login();				
+				break;
+			
+
 			default:
 				System.out.println("Deze keuze zit er niet tussen. Probeer opnieuw...");
 				keuzeGemaakt = false;
@@ -109,6 +128,7 @@ public class ReviewMe {
 		} while (keuzeGemaakt == false);
 	}
 
+	//invoer moet een int zijn anders moet er opnieuw ingevoerd worden
 	void valideerInvoer(){
 		keuze = -1;
 		try {
@@ -118,6 +138,7 @@ public class ReviewMe {
 		}
 	}
 
+	//Menu per categorie
 	void boekenLijst(){
 		int aantalBoeken = 0;
 		for(int i=0; i < items.size(); i++){
@@ -149,7 +170,7 @@ public class ReviewMe {
 				}
 			}
 			if(keuze == 0){
-				reviewMenu();
+				hoofdMenu();
 				keuzeGemaakt = true;
 			}else if (!keuzeGemaakt){
 				System.out.println("Verkeerde invoer. Probeer opnieuw...");
@@ -158,7 +179,6 @@ public class ReviewMe {
 		itemId = boekenlijst[boekKeuze];
 		itemMenu();
 	}
-	
 	void videoLijst(){
 		int aantalVideos = 0;
 		for(int i=0; i < items.size(); i++){
@@ -170,7 +190,7 @@ public class ReviewMe {
 		int [] videolijst = new int[aantalVideos];
 		boolean keuzeGemaakt = false;
 		while(keuzeGemaakt == false){
-			System.out.println("Kies een boek:");
+			System.out.println("Kies een video:");
 			System.out.println("============================");
 			int index = 0;
 			for (int i = 0; i < items.size(); i++) {
@@ -190,7 +210,7 @@ public class ReviewMe {
 				}
 			}
 			if(keuze == 0){
-				reviewMenu();
+				hoofdMenu();
 				keuzeGemaakt = true;
 			}else if (!keuzeGemaakt){
 				System.out.println("Verkeerde invoer. Probeer opnieuw...");
@@ -199,7 +219,6 @@ public class ReviewMe {
 		itemId = videolijst[videoKeuze];
 		itemMenu();
 	}
-	
 	void songLijst(){
 		int aantalSongs = 0;
 		for(int i=0; i < items.size(); i++){
@@ -211,7 +230,7 @@ public class ReviewMe {
 		int [] songlijst = new int[aantalSongs];
 		boolean keuzeGemaakt = false;
 		while(keuzeGemaakt == false){
-			System.out.println("Kies een boek:");
+			System.out.println("Kies een lied:");
 			System.out.println("============================");
 			int index = 0;
 			for (int i = 0; i < items.size(); i++) {
@@ -231,7 +250,7 @@ public class ReviewMe {
 				}
 			}
 			if(keuze == 0){
-				reviewMenu();
+				hoofdMenu();
 				keuzeGemaakt = true;
 			}else if (!keuzeGemaakt){
 				System.out.println("Verkeerde invoer. Probeer opnieuw...");
@@ -240,9 +259,9 @@ public class ReviewMe {
 		itemId = songlijst[songKeuze];
 		itemMenu();
 	}
-	
-	
 
+
+	//menu van een item zelf
 	void itemMenu(){
 		boolean keuzeGemaakt = false;
 		while (keuzeGemaakt == false){
@@ -280,6 +299,7 @@ public class ReviewMe {
 
 	}
 
+	//methode voor het geven van een cijfer
 	void cijferGeven(){
 		int cijfer;
 		//loop ter verificatie van een juiste invoer
@@ -291,14 +311,14 @@ public class ReviewMe {
 			System.out.println(items.get(itemId).getTitel());
 			System.out.println("============================");
 			//Kijken of item al beoordeeld is door Gebruiker
-			
+
 			for(int i = 0; i < gebruikers.get(gebruikerId).getItemId().size(); i++){	
 				if(itemId == (int) gebruikers.get(gebruikerId).getItemId().get(i)){
 					cijferIndexGebruiker = i;
 					cijferIndexItem = items.get(itemId).getGebruikerId().indexOf(gebruikerId);
 					cijferAlGegeven = true;
 					System.out.println("U heeft eerder een "+ gebruikers.get(gebruikerId).getCijferlijst().get(i)+".0 gegeven.");	
-					
+
 				}
 			}
 			System.out.println(cijferIndexGebruiker);
