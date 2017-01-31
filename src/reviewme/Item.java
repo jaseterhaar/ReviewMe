@@ -1,19 +1,23 @@
 package reviewme;
 
+import java.util.ArrayList;
+
 public abstract class Item {
 	private int uploadId;
 	private String titel;
 	private int cijferCount=1;
+
+	private ArrayList<Integer> gebruikerId = new ArrayList<>();
+	private ArrayList<Integer> cijferlijst = new ArrayList<>();
 	
-	private int [][] cijferLijst = new int[cijferCount][2];
-	
+
 	public int getUploadId(){
 		return uploadId;
 	}
 	public void setUploadId(int id){
 		uploadId = id;
 	}
-	
+
 	public String getTitel(){
 		return titel;
 	}	
@@ -21,19 +25,32 @@ public abstract class Item {
 		titel = title;
 	}
 
-	public int [][]getCijferLijst(){
-		return cijferLijst;
+	public ArrayList getGebruikerId(){
+		return gebruikerId;
 	}
-	public void setCijferLijst(int index, int gebruikersId, int cijfer){
-		cijferLijst[index][0] = gebruikersId;
-		cijferLijst[index][1] = cijfer;
-		cijferCount++;
+	public ArrayList getCijferlijst(){
+		return cijferlijst;
 	}
-	
+	public void addCijfer(int itemId, int cijfer){
+		
+		this.gebruikerId.add(itemId);
+		cijferlijst.add(cijfer);
+		
+	}
+	public void changeCijfer(int index, int itemId, int cijfer){
+		System.out.println("index" + index);
+		System.out.println("itemId" + itemId);
+		System.out.println("cijfer" + cijfer);
+		
+		this.gebruikerId.set(index, itemId);
+		cijferlijst.set(index, cijfer);	
+	}
+
+	//aantal gegeven cijfers bij item
 	public int getCijferCount(){
 		return cijferCount;
 	}
-	
+
 }
 
 class Boek extends Item{
@@ -41,7 +58,7 @@ class Boek extends Item{
 		setUploadId(id);
 		setTitel(titel);
 	}
-	
+
 }
 
 class Song extends Item{
@@ -49,7 +66,7 @@ class Song extends Item{
 		setUploadId(id);
 		setTitel(titel);
 	}
-	
+
 }
 
 class Video extends Item{
@@ -57,5 +74,5 @@ class Video extends Item{
 		setUploadId(id);
 		setTitel(titel);
 	}
-	
+
 }

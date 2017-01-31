@@ -3,12 +3,14 @@ package reviewme;
 import java.util.ArrayList;
 
 public abstract class Gebruiker {
-	String gebruikersNaam;
-	String wachtwoord;
-	int cijferCount=1;
+	private String gebruikersNaam;
+	private String wachtwoord;
+	private int cijferCount=1;
 	
-	//[cijferId][cijfer]
-	private int [][] cijferLijst = new int[cijferCount][2];
+
+	private ArrayList<Integer> itemId = new ArrayList<>();
+	private ArrayList<Integer> cijferlijst = new ArrayList<>();
+	
 	
 	public String getGebruikersNaam(){
 		return gebruikersNaam;
@@ -24,14 +26,23 @@ public abstract class Gebruiker {
 		wachtwoord = password;
 	}
 	
-	public int [][]getCijferLijst(){
-		return cijferLijst;
+	//lijsten voor de gegeven cijfers en methodes voor het aanmaken van deze waarden
+	public ArrayList getItemId(){
+		return itemId;
 	}
-	public void setCijferLijst(int index, int cijferId, int cijfer){
-		cijferLijst[index][0] = cijferId;
-		cijferLijst[index][1] = cijfer;
-		cijferCount++;
+	public ArrayList getCijferlijst(){
+		return cijferlijst;
 	}
+	public void addCijfer(int itemId, int cijfer){
+		this.itemId.add(itemId);
+		cijferlijst.add(cijfer);	
+	}
+	public void changeCijfer(int index, int itemId, int cijfer){
+		
+		this.itemId.set(index, itemId);
+		cijferlijst.set(index, cijfer);	
+	}
+	
 	public int getCijferCount(){
 		return cijferCount;
 	}
