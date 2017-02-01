@@ -31,15 +31,15 @@ public abstract class Item {
 	public ArrayList getCijferlijst(){
 		return cijferlijst;
 	}
-	public void addCijfer(int itemId, int cijfer){
+	public void addCijfer(int IdOfGebruiker, int cijfer){
 		
-		this.gebruikerId.add(itemId);
+		gebruikerId.add(IdOfGebruiker);
 		cijferlijst.add(cijfer);
 		
 	}
-	public void changeCijfer(int index, int itemId, int cijfer){
+	public void changeCijfer(int index, int gebruikerId, int cijfer){
 		
-		this.gebruikerId.set(index, itemId);
+		this.gebruikerId.set(index, gebruikerId);
 		cijferlijst.set(index, cijfer);	
 	}
 

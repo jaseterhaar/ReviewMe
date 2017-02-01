@@ -33,8 +33,8 @@ public abstract class Gebruiker {
 	public ArrayList getCijferlijst(){
 		return cijferlijst;
 	}
-	public void addCijfer(int itemId, int cijfer){
-		this.itemId.add(itemId);
+	public void addCijfer(int idOfItem, int cijfer){
+		itemId.add(idOfItem);
 		cijferlijst.add(cijfer);	
 	}
 	public void changeCijfer(int index, int itemId, int cijfer){

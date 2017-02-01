@@ -11,15 +11,17 @@ public class ReviewMe {
 	private int keuze;
 	private int itemId;
 
-
+	//starten van de applicatie
 	void start(){		
 		laadGebruikers(); //inladen van gebruikers
 		laadUploads(); //inladen van uploads
+		laadDummies();//Inladen van gegeven cijfers (Dummies)
+		gebruikersInfoMenu();
 
+		//System.out.println("Welcome bij ReviewMe!");
+		//System.out.println("=====================\n");
+		//login();
 
-		System.out.println("Welcome bij ReviewMe!");
-		System.out.println("=====================\n");
-		login();
 	}
 	void login(){
 		boolean loginValidated = false;
@@ -60,43 +62,38 @@ public class ReviewMe {
 			System.out.println("Maak een keuze:");
 			System.out.println("===============");
 			for (int i = 0; i < categorie.length; i++) {
-				System.out.println((i+1)+": "+categorie[i]);
+				System.out.println((i+1)+" : "+categorie[i]);
 			}
 			//optie voor afsluiten of in geval van uploader naar hoofdmenu gaan.
 			if (gebruikers.get(gebruikerId) instanceof Uploader){
-				System.out.println("7: Upload item");
+				System.out.println("U : Upload item");
 			}
-			System.out.println("8: Gebruikersinfo");
-			System.out.println("9: Log uit");
-			System.out.println("0: Sluit af");
+			System.out.println("I : Gebruikersinfo");
+			System.out.println("L : Log uit");
+			System.out.println("X : Sluit af");
 
 
 
 			System.out.println();		
-			int keuze = 0;
-			try {
-				keuze = scanner.nextInt();
-			} catch (InputMismatchException ime){
-				scanner.next();
-			}
+			String keuze = scanner.nextLine().toUpperCase();
 
 			switch(keuze){
-			case 0:
+			case "X":
 				System.exit(1);
 				break;
-			case 1:
+			case "1":
 				keuzeGemaakt = true;
 				boekenLijst();
 				break;
-			case 2:
+			case "2":
 				keuzeGemaakt = true;
 				songLijst();
 				break;
-			case 3:
+			case "3":
 				keuzeGemaakt = true;
 				videoLijst();
 				break;
-			case 7:
+			case "U":
 				if(gebruikers.get(gebruikerId) instanceof Uploader){
 					System.out.println("uploadMenu");
 					keuzeGemaakt = true;
@@ -107,18 +104,18 @@ public class ReviewMe {
 					break;
 				}
 
-			case 8:
+			case "I":
 				keuzeGemaakt = true;
-				System.out.println("GebruikersInfo");
+				gebruikersInfoMenu();
 				break;
-			case 9:
+			case "L":
 				keuzeGemaakt = true;
-				System.out.println("U bent nu uitgelogd. \n====================\nVul onderstaande gegevens in om in te loggen:");
+				System.out.println("U bent nu uitgelogd. \n====================\nDruk op een toets om door te gaan...");
 
 				scanner.nextLine();
 				login();				
 				break;
-			
+
 
 			default:
 				System.out.println("Deze keuze zit er niet tussen. Probeer opnieuw...");
@@ -373,5 +370,159 @@ public class ReviewMe {
 
 	}
 
+	//menu voor het krijgen van gebruikersinfo
+	void gebruikersInfoMenu(){
+		boolean keuzeGemaakt = false;
+		while (keuzeGemaakt == false){
+			System.out.print("Ingelogde gebruiker: ");
 
+			System.out.println(gebruikers.get(gebruikerId).getGebruikersNaam());
+			System.out.println("=====================");
+			System.out.println("1 : Wijzig gegevens");
+			System.out.println("2 : Gegeven cijfers");
+			if(gebruikers.get(gebruikerId) instanceof Uploader){
+				System.out.println("3 : Bekijk je uploads");
+			}
+			System.out.println("0 : Hoofdmenu");
+			valideerInvoer();
+			switch(keuze){
+			case 0:
+				hoofdMenu();
+				keuzeGemaakt = true;
+				break;
+			case 1:
+				System.out.println("Wijzig gegevens");
+				keuzeGemaakt = true;
+				break;
+			case 2:
+				gegevenCijfers();
+				keuzeGemaakt = true;
+				break;
+			case 3:
+				if(gebruikers.get(gebruikerId) instanceof Uploader){
+					System.out.println("Hier komt uploadMenu");
+					keuzeGemaakt = true;
+					break;
+				} else {
+					System.out.println("Verkeerde invoer. Probeer opnieuw...");
+					keuzeGemaakt = false;
+					break;
+				}
+			default:
+				System.out.println("Verkeerde invoer. Probeer opnieuw...");
+				keuzeGemaakt = false;
+				break;
+			}
+		}
+	}
+	void gegevenCijfers(){
+		System.out.println("U heeft de volgende cijfers gegeven:");
+		System.out.println("====================================");
+		
+		for (int i = 0; i < gebruikers.get(gebruikerId).getCijferlijst().size(); i++) {
+			int idOfItem = (int) gebruikers.get(gebruikerId).getItemId().get(i);
+			System.out.println(items.get(idOfItem).getClass().getSimpleName());
+			System.out.println(items.get(idOfItem).getTitel());
+			System.out.println("cijfer: " + gebruikers.get(gebruikerId).getCijferlijst().get(i)+".0");
+			System.out.println("------------------------------------");
+		}
+		System.out.println("Druk op een toets om verder te gaan...");
+		scanner.nextLine();
+		scanner.nextLine();
+		gebruikersInfoMenu();
+	}
+	////////////////////
+	////////////////////
+	////////////////////
+	////////////////////
+	void laadDummies(){
+		
+		//gebruiker 2
+		gebruikers.get(2).addCijfer(0, 8);
+		items.get(0).addCijfer(2, 8);		
+		gebruikers.get(2).addCijfer(1, 7);
+		items.get(1).addCijfer(2, 7);
+		gebruikers.get(2).addCijfer(2, 6);
+		items.get(2).addCijfer(2, 6);
+		gebruikers.get(2).addCijfer(3, 5);
+		items.get(3).addCijfer(2, 5);
+		gebruikers.get(2).addCijfer(4, 6);
+		items.get(4).addCijfer(2, 6);
+		gebruikers.get(2).addCijfer(5, 8);
+		items.get(5).addCijfer(2, 8);
+		gebruikers.get(2).addCijfer(6, 9);
+		items.get(6).addCijfer(2, 9);
+		gebruikers.get(2).addCijfer(7, 4);
+		items.get(7).addCijfer(2, 4);
+		gebruikers.get(2).addCijfer(8, 3);
+		items.get(8).addCijfer(2, 3);
+		gebruikers.get(2).addCijfer(9, 3);
+		items.get(9).addCijfer(2, 6);
+		
+		//gebruiker 0
+		gebruikers.get(0).addCijfer(0, 10);
+		items.get(0).addCijfer(0, 10);		
+		gebruikers.get(0).addCijfer(1, 6);
+		items.get(1).addCijfer(0, 6);
+		gebruikers.get(0).addCijfer(2, 6);
+		items.get(2).addCijfer(0, 6);
+		gebruikers.get(0).addCijfer(3, 7);
+		items.get(3).addCijfer(0, 7);
+		gebruikers.get(0).addCijfer(4, 5);
+		items.get(4).addCijfer(0, 5);
+		gebruikers.get(0).addCijfer(5, 3);
+		items.get(5).addCijfer(0, 3);
+		gebruikers.get(0).addCijfer(6, 5);
+		items.get(6).addCijfer(0, 5);
+		gebruikers.get(0).addCijfer(7, 5);
+		items.get(7).addCijfer(0, 5);
+		gebruikers.get(0).addCijfer(8, 6);
+		items.get(8).addCijfer(0, 6);
+		gebruikers.get(0).addCijfer(9, 2);
+		items.get(9).addCijfer(0, 2);
+		
+		//gebruiker 1
+		gebruikers.get(1).addCijfer(0, 7);
+		items.get(0).addCijfer(1, 7);		
+		gebruikers.get(1).addCijfer(1, 7);
+		items.get(1).addCijfer(1, 7);
+		gebruikers.get(1).addCijfer(2, 6);
+		items.get(2).addCijfer(1, 6);
+		gebruikers.get(1).addCijfer(3, 7);
+		items.get(3).addCijfer(1, 7);
+		gebruikers.get(1).addCijfer(4, 5);
+		items.get(4).addCijfer(1, 5);
+		gebruikers.get(1).addCijfer(5, 6);
+		items.get(5).addCijfer(1, 6);
+		gebruikers.get(1).addCijfer(6, 7);
+		items.get(6).addCijfer(1, 7);
+		gebruikers.get(1).addCijfer(7, 5);
+		items.get(7).addCijfer(1, 5);
+		gebruikers.get(1).addCijfer(8, 8);
+		items.get(8).addCijfer(1, 8);
+		gebruikers.get(1).addCijfer(9, 5);
+		items.get(9).addCijfer(1, 5);
+		
+		//gebruiker 3
+		gebruikers.get(3).addCijfer(0, 8);
+		items.get(0).addCijfer(3, 8);		
+		gebruikers.get(3).addCijfer(1, 8);
+		items.get(1).addCijfer(3, 8);
+		gebruikers.get(3).addCijfer(2, 4);
+		items.get(2).addCijfer(3, 4);
+		gebruikers.get(3).addCijfer(3, 7);
+		items.get(3).addCijfer(3, 7);
+		gebruikers.get(3).addCijfer(4, 9);
+		items.get(4).addCijfer(3, 9);
+		gebruikers.get(3).addCijfer(5, 9);
+		items.get(5).addCijfer(3, 9);
+		gebruikers.get(3).addCijfer(6, 5);
+		items.get(6).addCijfer(3, 5);
+		gebruikers.get(3).addCijfer(7, 7);
+		items.get(7).addCijfer(3, 7);
+		gebruikers.get(3).addCijfer(8, 7);
+		items.get(8).addCijfer(3, 7);
+		gebruikers.get(3).addCijfer(9, 6);
+		items.get(9).addCijfer(3, 6);
+	}
 }
