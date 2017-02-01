@@ -263,10 +263,13 @@ public class ReviewMe {
 		boolean keuzeGemaakt = false;
 		while (keuzeGemaakt == false){
 			System.out.println("U heeft gekozen voor:\n"+ items.get(itemId).getTitel());
+			
 			System.out.println("============================");
 			System.out.println("1 : Info over item");
 			System.out.println("2 : Geef een cijfer");
 			System.out.println("0 : Ga terug naar vorig menu");
+			
+			System.out.println(getGemiddeldeCijfer());
 			valideerInvoer();
 			switch(keuze){
 			case 1:
@@ -431,6 +434,19 @@ public class ReviewMe {
 		scanner.nextLine();
 		gebruikersInfoMenu();
 	}
+	int getGemiddeldeCijfer(){
+		int aantal = items.get(itemId).getCijferlijst().size();
+		int totaal = 0;
+		System.out.println(aantal);
+		for (int i = 0; i < aantal; i++) {
+			System.out.println(items.get(itemId).getCijferlijst().get(i));
+			totaal =+ (int)items.get(itemId).getCijferlijst().get(i);
+		}
+		System.out.println("Totaal is: "+totaal);
+		System.out.println("Gemiddelde is: "+ (totaal/aantal));
+		return totaal;
+	}
+	
 	////////////////////
 	////////////////////
 	////////////////////
