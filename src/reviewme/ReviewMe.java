@@ -16,11 +16,10 @@ public class ReviewMe {
 		laadGebruikers(); //inladen van gebruikers
 		laadUploads(); //inladen van uploads
 		laadDummies();//Inladen van gegeven cijfers (Dummies)
-		gebruikersInfoMenu();
 
-		//System.out.println("Welcome bij ReviewMe!");
-		//System.out.println("=====================\n");
-		//login();
+		System.out.println("Welcome bij ReviewMe!");
+		System.out.println("=====================\n");
+		login();
 
 	}
 	void login(){
@@ -263,13 +262,12 @@ public class ReviewMe {
 		boolean keuzeGemaakt = false;
 		while (keuzeGemaakt == false){
 			System.out.println("U heeft gekozen voor:\n"+ items.get(itemId).getTitel());
-			
-			System.out.println("============================");
+			System.out.print("Gemiddelde cijfer: ");
+			System.out.printf("%.1f", getGemiddeldeCijfer());
+			System.out.println("\n============================");
 			System.out.println("1 : Info over item");
 			System.out.println("2 : Geef een cijfer");
 			System.out.println("0 : Ga terug naar vorig menu");
-			
-			System.out.println(getGemiddeldeCijfer());
 			valideerInvoer();
 			switch(keuze){
 			case 1:
@@ -321,8 +319,6 @@ public class ReviewMe {
 
 				}
 			}
-			System.out.println(cijferIndexGebruiker);
-			System.out.println(cijferIndexItem);
 			//Geven van een cijfer
 			System.out.println("Geef een cijfer van 0 t/m 10:");
 			valideerInvoer();//controle of het een geldige invoer is
@@ -434,22 +430,16 @@ public class ReviewMe {
 		scanner.nextLine();
 		gebruikersInfoMenu();
 	}
-	int getGemiddeldeCijfer(){
+	double getGemiddeldeCijfer(){
 		int aantal = items.get(itemId).getCijferlijst().size();
-		int totaal = 0;
-		System.out.println(aantal);
+		double totaal = 0;
 		for (int i = 0; i < aantal; i++) {
-			System.out.println(items.get(itemId).getCijferlijst().get(i));
-			totaal =+ (int)items.get(itemId).getCijferlijst().get(i);
+			totaal = totaal + (int)items.get(itemId).getCijferlijst().get(i);
 		}
-		System.out.println("Totaal is: "+totaal);
-		System.out.println("Gemiddelde is: "+ (totaal/aantal));
-		return totaal;
+		
+		return totaal/aantal;
 	}
 	
-	////////////////////
-	////////////////////
-	////////////////////
 	////////////////////
 	void laadDummies(){
 		
