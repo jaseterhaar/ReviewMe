@@ -17,14 +17,14 @@ public class ReviewMe {
 		laadUploads(); //inladen van uploads
 		laadDummies();//Inladen van gegeven cijfers (Dummies)
 
-		System.out.println("Welcome bij ReviewMe!");
-		System.out.println("=====================\n");
+		titelBlok("Welkom bij ReviewMe!");
 		login();
 
 	}
 	void login(){
 		boolean loginValidated = false;
 		while(loginValidated == false){
+			titelBlok("LOGIN");
 			System.out.print("Gebruikersnaam: ");
 			String gebruikersnaam = scanner.nextLine();
 			System.out.print("Password: ");
@@ -58,8 +58,7 @@ public class ReviewMe {
 
 		boolean keuzeGemaakt = false;
 		while (keuzeGemaakt == false){
-			System.out.println("Maak een keuze:");
-			System.out.println("===============");
+			titelBlok("Maak een keuze:");
 			for (int i = 0; i < categorie.length; i++) {
 				System.out.println((i+1)+" : "+categorie[i]);
 			}
@@ -146,8 +145,7 @@ public class ReviewMe {
 		int [] boekenlijst = new int[aantalBoeken];
 		boolean keuzeGemaakt = false;
 		while(keuzeGemaakt == false){
-			System.out.println("Kies een boek:");
-			System.out.println("============================");
+			titelBlok("Kies een boek:");
 			int index = 0;
 			for (int i = 0; i < items.size(); i++) {
 				if(items.get(i) instanceof Boek){
@@ -186,8 +184,7 @@ public class ReviewMe {
 		int [] videolijst = new int[aantalVideos];
 		boolean keuzeGemaakt = false;
 		while(keuzeGemaakt == false){
-			System.out.println("Kies een video:");
-			System.out.println("============================");
+			titelBlok("Kies een video:");
 			int index = 0;
 			for (int i = 0; i < items.size(); i++) {
 				if(items.get(i) instanceof Video){
@@ -226,8 +223,7 @@ public class ReviewMe {
 		int [] songlijst = new int[aantalSongs];
 		boolean keuzeGemaakt = false;
 		while(keuzeGemaakt == false){
-			System.out.println("Kies een lied:");
-			System.out.println("============================");
+			titelBlok("Kies een lied:");
 			int index = 0;
 			for (int i = 0; i < items.size(); i++) {
 				if(items.get(i) instanceof Song){
@@ -261,7 +257,8 @@ public class ReviewMe {
 	void itemMenu(){
 		boolean keuzeGemaakt = false;
 		while (keuzeGemaakt == false){
-			System.out.println("U heeft gekozen voor:\n"+ items.get(itemId).getTitel());
+			titelBlok("U heeft gekozen voor: "+ items.get(itemId).getTitel());
+			
 			System.out.print("Gemiddelde cijfer: ");
 			System.out.printf("%.1f", getGemiddeldeCijfer());
 			System.out.println("\n============================");
@@ -306,8 +303,7 @@ public class ReviewMe {
 			boolean cijferAlGegeven = false;
 			int cijferIndexGebruiker = 0;
 			int cijferIndexItem = 0;
-			System.out.println(items.get(itemId).getTitel());
-			System.out.println("============================");
+			titelBlok(items.get(itemId).getTitel());
 			//Kijken of item al beoordeeld is door Gebruiker
 
 			for(int i = 0; i < gebruikers.get(gebruikerId).getItemId().size(); i++){	
@@ -373,10 +369,7 @@ public class ReviewMe {
 	void gebruikersInfoMenu(){
 		boolean keuzeGemaakt = false;
 		while (keuzeGemaakt == false){
-			System.out.print("Ingelogde gebruiker: ");
-
-			System.out.println(gebruikers.get(gebruikerId).getGebruikersNaam());
-			System.out.println("=====================");
+			titelBlok("Ingelogde gebruiker: "+gebruikers.get(gebruikerId).getGebruikersNaam());
 			System.out.println("1 : Wijzig gegevens");
 			System.out.println("2 : Gegeven cijfers");
 			if(gebruikers.get(gebruikerId) instanceof Uploader){
@@ -415,8 +408,7 @@ public class ReviewMe {
 		}
 	}
 	void gegevenCijfers(){
-		System.out.println("U heeft de volgende cijfers gegeven:");
-		System.out.println("====================================");
+		titelBlok("U heeft de volgende cijfers gegeven:");
 		
 		for (int i = 0; i < gebruikers.get(gebruikerId).getCijferlijst().size(); i++) {
 			int idOfItem = (int) gebruikers.get(gebruikerId).getItemId().get(i);
@@ -438,6 +430,21 @@ public class ReviewMe {
 		}
 		
 		return totaal/aantal;
+	}
+	
+	void titelBlok(String titelBlokTitel){
+		String a = "*";
+		System.out.print("\n"+a+a);
+		for (int i = 0; i < titelBlokTitel.length(); i++) {
+			System.out.print(a);
+		}
+		System.out.print(a+a+"\n");
+		System.out.println(a+" "+titelBlokTitel+" "+a);
+		System.out.print(a+a);
+		for (int i = 0; i < titelBlokTitel.length(); i++) {
+			System.out.print(a);
+		}
+		System.out.println(a+a+"\n");
 	}
 	
 	////////////////////
